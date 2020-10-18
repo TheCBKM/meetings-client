@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "onlinesessions-aede1"
+  },
+  "targets": {
+    "onlinesessions-aede1": {
+      "hosting": {
+        "meetings": [
+          "meetings.cbkm.in"
+        ]
+      }
+    }
+  }
+}
