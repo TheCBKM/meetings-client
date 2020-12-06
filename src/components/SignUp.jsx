@@ -10,7 +10,6 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {
       provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-      // The default selected country.
       defaultCountry: "IN",
     },
   ],

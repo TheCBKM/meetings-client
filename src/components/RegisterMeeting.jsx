@@ -210,7 +210,7 @@ export default function RegisterMeeting(props) {
           city,
         })
       )
-      .then(() => navigate('/'))
+      .then(() => message.success("Thank you for registering with us.."))
       .catch(console.log);
   };
   const onFinishFailed = (errorInfo) => {
@@ -375,11 +375,13 @@ export default function RegisterMeeting(props) {
       </div>
       {isBooked && (
         <div style={{ marginTop: 20 }}>
-          <Card style={{ marginBottom: 10 }} title="Analytics">
-            <p>Total Registered :{logsRegisterCount}</p>
-            <p>Total Attendee :{logsAttendeeCount}</p>
-            <p>Total Questions :{logsQuestionsCount}</p>
-          </Card>
+          <center>
+            <Card style={{ marginBottom: 10 }} title="Analytics">
+              <p>Total Registered :{logsRegisterCount}</p>
+              <p>Total Attendee :{logsAttendeeCount}</p>
+              <p>Total Questions :{logsQuestionsCount}</p>
+            </Card>
+          </center>
           <Card title="Log Book">
             {logs.map((l, i) => (
               <Card
