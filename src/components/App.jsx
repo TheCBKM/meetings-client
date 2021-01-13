@@ -9,8 +9,9 @@ import { userStore } from "./Store";
 import AllMeetings from "./AllMeetings";
 import { Menu, PageHeader, Spin } from "antd";
 import { auth } from "../firebase";
-import EditMeeting from "./RegisterMeeting.jsx";
 import RegisterMeeting from "./RegisterMeeting.jsx";
+import Audios from "./Audios.jsx";
+import Player from "./Player.jsx";
 
 export default function App() {
   const user = userStore.useState((s) => s.user);
@@ -51,6 +52,9 @@ export default function App() {
                   <>
                     <AllMeetings default path="/meetings" />
                     <RegisterMeeting path="/register/:id" />
+                    <Audios path="/audio/all" />
+                    <Player path="/audio/:id" />
+
                   </>
                 )}
             </Router>

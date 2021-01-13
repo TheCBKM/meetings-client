@@ -5,7 +5,7 @@ import firebase from "firebase";
 
 const uiConfig = {
   signInFlow: "popup",
-  signInSuccessUrl: "/allmeetings",
+  signInSuccessUrl:  window.location.pathname=='/signup'?"/allmeetings":window.location.pathname,
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {
@@ -15,6 +15,7 @@ const uiConfig = {
   ],
 };
 export default function () {
+
   return (
     <div>
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
