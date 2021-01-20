@@ -25,7 +25,9 @@ export default function Player({ id }) {
                 onPlay={e => console.log("onPlay")}
             />
             <br/>
+            <center>
             <h2>{playing.title}</h2>
+                </center>
             <p>
                 {
                     playing.description && playing.description.split('I').map(function (item, idx) {
@@ -38,7 +40,6 @@ export default function Player({ id }) {
                     })
                 }
             </p>
-
         </div>
     )
 }
