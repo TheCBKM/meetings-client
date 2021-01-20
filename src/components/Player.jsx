@@ -39,6 +39,7 @@ export default function Player({ id }) {
                         )
                     })
                 }
+                {/* {playing.date.toDate().toDateString() } */}
             </p>
         </div>
     )
