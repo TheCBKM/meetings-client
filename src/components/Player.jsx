@@ -4,11 +4,13 @@ import 'react-h5-audio-player/lib/styles.less'
 import db from '../firebase';
 import firebase from "firebase";
 import { userStore } from './Store';
-
+import HeartOutlined, { HeartFilled, HeartTwoTone } from '@ant-design/icons'
+import { red } from '@material-ui/core/colors';
+import { Button, message } from 'antd';
 
 export default function Player({ id }) {
     const autUser = userStore.useState((s) => s.user);
-
+    const [liked, setliked] = useState(false)
     const [playing, setplaying] = useState({ title: "loading..." })
     useEffect(() => {
         db.collection("audio")
@@ -17,7 +19,23 @@ export default function Player({ id }) {
                 let data = snap.data();
                 setplaying(data)
             }));
+
+
         console.log(autUser.uid, autUser.displayName)
+
+
+        db.collection("audio")
+            .doc(id)
+            .collection("likes")
+            .doc(autUser.uid)
+            .get()
+            .then(doc => {
+                if (doc.exists) {
+                    setliked(true)
+                }
+            })
+
+
         db.collection("audio")
             .doc(id)
             .collection("viewers")
@@ -26,14 +44,31 @@ export default function Player({ id }) {
             .then(doc => {
                 console.log(doc.exists, doc.ref)
                 if (!doc.exists) {
-                    doc.ref.set({ id: autUser.uid, name: autUser.displayName, time: firebase.firestore.Timestamp.now() })
+                    doc.ref.set({ id: autUser.uid, name: autUser.displayName || "", time: firebase.firestore.Timestamp.now() })
                     db.collection("audio")
                         .doc(id)
                         .update({ views: firebase.firestore.FieldValue.increment(1) })
                 }
             })
     }, [])
+    const likeIt = () => {
+        if (!liked) {
+            message.success("Thank you for a LIKE")
 
+            db.collection("audio")
+                .doc(id)
+                .update({ liked: firebase.firestore.FieldValue.increment(1) })
+
+            db.collection("audio")
+                .doc(id)
+                .collection("likes")
+                .doc(autUser.uid)
+                .set({ id: autUser.uid, name: autUser.displayName || "", time: firebase.firestore.Timestamp.now() })
+            setliked(true)
+
+        }
+
+    }
     return (
         <div>
 
@@ -49,9 +84,17 @@ export default function Player({ id }) {
                 <h2>{playing.title}</h2>
             </center>
             <p>
-                {playing.views && playing.views+10} watched
+                {playing.views && playing.views + 10} watched
+               &nbsp; &nbsp;
+                {playing.liked + 10 || 0} liked &nbsp;
+                <Button size={"small"} onClick={likeIt}>
+                    <HeartTwoTone twoToneColor={liked ? "#eb2f96" : ""} style={{
+                        fontSize: "20px",
+                    }} />
+                </Button>
                 <br />
                 <br />
+
                 <h4>
                     Description:-
                 </h4>
