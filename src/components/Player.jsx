@@ -4,18 +4,25 @@ import 'react-h5-audio-player/lib/styles.less'
 import db from '../firebase';
 import firebase from "firebase";
 import { userStore } from './Store';
-import HeartOutlined, { HeartFilled, HeartTwoTone } from '@ant-design/icons'
-import { red } from '@material-ui/core/colors';
+import HeartOutlined, { EyeTwoTone, HeartFilled, HeartTwoTone } from '@ant-design/icons'
+import LoadingOverlay from 'react-loading-overlay'
 import { Button, message } from 'antd';
+import { navigate } from '@reach/router'
+
 
 export default function Player({ id }) {
     const autUser = userStore.useState((s) => s.user);
     const [liked, setliked] = useState(false)
     const [playing, setplaying] = useState({ title: "loading..." })
+    const [loading, setloading] = useState(true)
     useEffect(() => {
         db.collection("audio")
             .doc(id)
             .onSnapshot((async (snap) => {
+                if (!snap.exists) {
+                    navigate("/")
+                    return
+                }
                 let data = snap.data();
                 setplaying(data)
             }));
@@ -70,28 +77,34 @@ export default function Player({ id }) {
 
     }
     return (
-        <div>
+        <div style={{ height: "50vh" }}>
+            <LoadingOverlay
+                active={loading}
+                spinner
+                text={"Loading your audio...."}
 
-            <AudioPlayer
+            >
 
-                header={<center><h3>Now Playing:- {playing.title}.</h3>   </center>}
-                customAdditionalControls={[]}
-                src={`https://docs.google.com/uc?export=download&id=${id}`}
-                onPlay={e => console.log("onPlay")}
-            />
+                <AudioPlayer
+
+                    header={<center><h3>Now Playing:- {playing.title}.</h3>   </center>}
+                    customAdditionalControls={[]}
+                    src={`https://docs.google.com/uc?export=download&id=${id}`}
+                    onCanPlay={e => { console.log("onCanPlay"); setloading(false) }}
+
+                />
+            </LoadingOverlay>
+
             <br />
             <center>
                 <h2>{playing.title}</h2>
             </center>
             <p>
-                {playing.views && playing.views + 10} watched
-               &nbsp; &nbsp;
+                {playing.views && playing.views + 10} watched <EyeTwoTone />&nbsp;  | &nbsp;
                 {playing.liked + 10 || 0} liked &nbsp;
-                <Button size={"small"} onClick={likeIt}>
-                    <HeartTwoTone twoToneColor={liked ? "#eb2f96" : ""} style={{
-                        fontSize: "20px",
-                    }} />
-                </Button>
+                    <HeartTwoTone id="like-button" onClick={likeIt} twoToneColor={liked ? "#eb2f96" : ""} style={{
+                    fontSize: "20px",
+                }} />
                 <br />
                 <br />
 
@@ -110,6 +123,7 @@ export default function Player({ id }) {
                 }
                 {/* {playing.date.toDate().toDateString() } */}
             </p>
+         
         </div>
     )
 }
