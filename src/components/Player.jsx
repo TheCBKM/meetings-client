@@ -18,43 +18,45 @@ export default function Player({ id }) {
     useEffect(() => {
         db.collection("audio")
             .doc(id)
-            .onSnapshot((async (snap) => {
+            .onSnapshot(async snap => {
                 if (!snap.exists) {
+                    // await db.collection("audio")
+                    //     .doc(id)
+                    //     .delete()
                     navigate("/")
-                    return
                 }
-                let data = snap.data();
-                setplaying(data)
-            }));
+                else {
+                    let data = snap.data();
+                    setplaying(data)
+                    console.log(autUser.uid, autUser.displayName)
 
 
-        console.log(autUser.uid, autUser.displayName)
-
-
-        db.collection("audio")
-            .doc(id)
-            .collection("likes")
-            .doc(autUser.uid)
-            .get()
-            .then(doc => {
-                if (doc.exists) {
-                    setliked(true)
-                }
-            })
-
-
-        db.collection("audio")
-            .doc(id)
-            .collection("viewers")
-            .doc(autUser.uid)
-            .get()
-            .then(doc => {
-                console.log(doc.exists, doc.ref)
-                if (!doc.exists) {
-                    doc.ref.set({ id: autUser.uid, name: autUser.displayName || "", time: firebase.firestore.Timestamp.now() })
                     db.collection("audio")
                         .doc(id)
-                        .update({ views: firebase.firestore.FieldValue.increment(1) })
+                        .collection("likes")
+                        .doc(autUser.uid)
+                        .get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                setliked(true)
+                            }
+                        })
+
+
+                    db.collection("audio")
+                        .doc(id)
+                        .collection("viewers")
+                        .doc(autUser.uid)
+                        .get()
+                        .then(doc => {
+                            console.log(doc.exists, doc.ref)
+                            if (!doc.exists) {
+                                doc.ref.set({ id: autUser.uid, name: autUser.displayName || "", time: firebase.firestore.Timestamp.now() })
+                                db.collection("audio")
+                                    .doc(id)
+                                    .update({ views: firebase.firestore.FieldValue.increment(1) })
+                            }
+                        })
                 }
             })
     }, [])
@@ -75,6 +77,11 @@ export default function Player({ id }) {
 
         }
 
+    }
+
+    const downloader = {
+        "rjoshi14899@gmail.com": true,
+        "dharwadkarnj@gmail.com": true
     }
     return (
         <div style={{ height: "50vh" }}>
@@ -99,6 +106,7 @@ export default function Player({ id }) {
             <center>
                 <h2>{playing.title}</h2>
             </center>
+
             <p>
                 {playing.views && playing.views + 10} watched <EyeTwoTone />&nbsp;  | &nbsp;
                 {playing.liked + 10 || 0} liked &nbsp;
@@ -106,8 +114,11 @@ export default function Player({ id }) {
                     fontSize: "20px",
                 }} />
                 <br />
+                {
+                    playing.date && playing.date.toDate().toString().substring(0, 15)
+                }
                 <br />
-
+                <br />
                 <h4>
                     Description:-
                 </h4>
@@ -121,9 +132,16 @@ export default function Player({ id }) {
                         )
                     })
                 }
-                {/* {playing.date.toDate().toDateString() } */}
+
+                <br />
+                {
+                    autUser && downloader[autUser.email] == true ?
+
+                        <Button href={`https://docs.google.com/uc?export=download&id=${id}`} target="_blank">Download</Button> : ""
+                }
+
             </p>
-         
+
         </div>
     )
 }
