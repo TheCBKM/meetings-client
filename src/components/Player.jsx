@@ -17,6 +17,12 @@ export default function Player({ id }) {
     const [liked, setliked] = useState(false)
     const [playing, setplaying] = useState({ title: "loading..." })
     const [loading, setloading] = useState(true)
+    const title = `*${playing.title}*
+Recording of *${playing.date && playing.date.toDate().toString().substring(0, 15)}* 😄🙏🏼
+I loved hearing this audio. Thought sharing with you
+
+`
+
     useEffect(() => {
         db.collection("audio")
             .doc(id)
@@ -115,32 +121,39 @@ export default function Player({ id }) {
                     <HeartTwoTone id="like-button" onClick={likeIt} twoToneColor={liked ? "#eb2f96" : ""} style={{
                     fontSize: "20px",
                 }} />
-                            <br/>    &nbsp;&nbsp;
+                <br />    &nbsp;&nbsp;
 
                 <WhatsappShareButton
                     url={window.location.href}
-                    title={"I loved hearing this audio. Thought sharing with you "}
-                    separator=" "
-                >
+                    title={title}
+                    separator=" ">
                     <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
-                &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
                 <TelegramShareButton
                     url={window.location.href}
-                    title={"I loved hearing this audio. Thought sharing with you "}
+                    title={title}
                 >
                     <TelegramIcon size={32} round />
                 </TelegramShareButton>
                 &nbsp;
-               
+                <EmailShareButton
+                    url={window.location.href}
+                    subject={"FROM CBKM"}
+                    body={title}
+                >
+                    <EmailIcon size={32} round />
+                </EmailShareButton>
+                &nbsp;
 
-                <br />
+
                 <br />
                 {
                     playing.date && playing.date.toDate().toString().substring(0, 15)
                 }
                 <br />
                 <br />
+                <hr/>
                 <h4>
                     Description:-
                 </h4>
@@ -155,6 +168,7 @@ export default function Player({ id }) {
                     })
                 }
 
+                <hr/>
                 <br />
                 {
                     autUser && downloader[autUser.email] == true ?
