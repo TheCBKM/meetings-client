@@ -9,6 +9,8 @@ import LoadingOverlay from 'react-loading-overlay'
 import { Button, message } from 'antd';
 import { navigate } from '@reach/router'
 
+import { EmailIcon, EmailShareButton, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, TelegramIcon, TelegramShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
+
 
 export default function Player({ id }) {
     const autUser = userStore.useState((s) => s.user);
@@ -113,6 +115,26 @@ export default function Player({ id }) {
                     <HeartTwoTone id="like-button" onClick={likeIt} twoToneColor={liked ? "#eb2f96" : ""} style={{
                     fontSize: "20px",
                 }} />
+                            <br/>    &nbsp;&nbsp;
+
+                <WhatsappShareButton
+                    url={window.location.href}
+                    title={"I loved hearing this audio. Thought sharing with you "}
+                    separator=" "
+                >
+                    <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+                &nbsp;&nbsp;
+                <TelegramShareButton
+                    url={window.location.href}
+                    title={"I loved hearing this audio. Thought sharing with you "}
+                >
+                    <TelegramIcon size={32} round />
+                </TelegramShareButton>
+                &nbsp;
+               
+
+                <br />
                 <br />
                 {
                     playing.date && playing.date.toDate().toString().substring(0, 15)
