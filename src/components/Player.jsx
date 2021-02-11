@@ -104,7 +104,7 @@ I loved hearing this audio. Thought sharing with you
 
                     header={<center><h3>Now Playing:- {playing.title}.</h3>   </center>}
                     customAdditionalControls={[]}
-                    src={`https://docs.google.com/uc?export=download&id=${id}`}
+                    src={`https://docs.google.com/uc?export=download&id=${playing.id}`}
                     onCanPlay={e => { console.log("onCanPlay"); setloading(false) }}
 
                 />
@@ -116,8 +116,8 @@ I loved hearing this audio. Thought sharing with you
             </center>
 
             <p>
-                {playing.views && playing.views + 10} watched <EyeTwoTone />&nbsp;  | &nbsp;
-                {playing.liked + 10 || 0} liked &nbsp;
+                {playing.views && playing.views} watched <EyeTwoTone />&nbsp;  | &nbsp;
+                {playing.like || 0} liked &nbsp;
                     <HeartTwoTone id="like-button" onClick={likeIt} twoToneColor={liked ? "#eb2f96" : ""} style={{
                     fontSize: "20px",
                 }} />
