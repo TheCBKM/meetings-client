@@ -117,7 +117,7 @@ I loved hearing this audio. Thought sharing with you
 
             <p>
                 {playing.views && playing.views} watched <EyeTwoTone />&nbsp;  | &nbsp;
-                {playing.like || 0} liked &nbsp;
+                {playing.liked || 0} liked &nbsp;
                     <HeartTwoTone id="like-button" onClick={likeIt} twoToneColor={liked ? "#eb2f96" : ""} style={{
                     fontSize: "20px",
                 }} />
