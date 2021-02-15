@@ -38,7 +38,9 @@ export default function App() {
                 <Menu.Item key="3" icon={<AppstoreOutlined />}>
                   <Link to="/meetings">All Meetings</Link>
                 </Menu.Item>
-
+                <Menu.Item key="2" icon={<AppstoreOutlined />}>
+                  <Link to="/audio/all">Recordings</Link>
+                </Menu.Item>
                 <Menu.Item key="1" style={{ float: "right" }} onClick={signOut}>
                   <p>Sign Out</p>
                 </Menu.Item>

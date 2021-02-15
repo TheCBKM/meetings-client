@@ -1,5 +1,5 @@
 import { Link } from '@reach/router'
-import { Button, Card } from 'antd'
+import { BackTop, Button, Card } from 'antd'
 import Search from 'antd/lib/input/Search';
 import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown';
@@ -37,7 +37,7 @@ export default function Audios() {
 
     function deepSearch(query) {
         console.log("audio", audio, query)
-        query = query.trim()
+        query = query.trim().toLowerCase()
         console.log()
         if (query === "") {
             setresult(audio)
@@ -49,18 +49,21 @@ export default function Audios() {
         })
 
         setresult([...res])
-
-
     }
     function search(str, res) {
         audio.map((i) => {
             i.description.split(' ').map(s => {
-                if (s.includes(str)) {
+                if (s.toLowerCase().includes(str)) {
                     res.add(i)
                 }
             })
             i.title.split(' ').map(s => {
-                if (s.includes(str)) {
+                if (s.toLowerCase().includes(str)) {
+                    res.add(i)
+                }
+            })
+            i.date.toDate().toString().split(' ').map(s => {
+                if (s.toLowerCase().includes(str)) {
                     res.add(i)
                 }
             })
@@ -69,6 +72,8 @@ export default function Audios() {
     }
     return (
         <div>
+            <BackTop />
+
             <Search placeholder="search any thing ( just type महाराज...)  " enterButton="Search" size="large" onChange={(e) => { deepSearch(e.target.value) }} />
             You can search for title description or even date. Can type in Hindi/Marathi.
             {
