@@ -82,7 +82,7 @@ export default function Audios() {
                         <p>
                             on {a.date.toDate().toString().substring(0, 15)}
                             <br />
-                            <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 30)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
+                            <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 60)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
 
                         </p>
                         <Link to={`/audio/${a.aid}`}>
