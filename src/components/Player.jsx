@@ -10,6 +10,7 @@ import { Button, message } from 'antd';
 import { navigate } from '@reach/router'
 
 import { EmailIcon, EmailShareButton, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, TelegramIcon, TelegramShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
+import ReactMarkdown from 'react-markdown'
 
 
 export default function Player({ id }) {
@@ -153,22 +154,18 @@ I loved hearing this audio. Thought sharing with you
                 }
                 <br />
                 <br />
-                <hr/>
+                <hr />
                 <h4>
                     Description:-
                 </h4>
-                {
-                    playing.description && playing.description.split('I').map(function (item, idx) {
-                        return (
-                            <span key={idx}>
-                                {item}
-                                <br />
-                            </span>
-                        )
-                    })
-                }
+                <ReactMarkdown>
+                    {
 
-                <hr/>
+                        playing.description && playing.description.replaceAll('\\n', '\n')
+
+                    }
+                </ReactMarkdown>
+                <hr />
                 <br />
                 {
                     autUser && downloader[autUser.email] == true ?
