@@ -4,9 +4,9 @@ import 'react-h5-audio-player/lib/styles.less'
 import db from '../firebase';
 import firebase from "firebase";
 import { userStore } from './Store';
-import HeartOutlined, { EyeTwoTone, HeartFilled, HeartTwoTone } from '@ant-design/icons'
+import HeartOutlined, { ClockCircleOutlined, EyeTwoTone, HeartFilled, HeartTwoTone, SmileOutlined } from '@ant-design/icons'
 import LoadingOverlay from 'react-loading-overlay'
-import { Button, message } from 'antd';
+import { Button, message,notification,Timeline } from 'antd';
 import { navigate } from '@reach/router'
 
 import { EmailIcon, EmailShareButton, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, TelegramIcon, TelegramShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
@@ -15,9 +15,13 @@ import ReactMarkdown from 'react-markdown'
 
 export default function Player({ id }) {
     const autUser = userStore.useState((s) => s.user);
+    const playerRef = React.useRef(null)
+
     const [liked, setliked] = useState(false)
     const [playing, setplaying] = useState({ title: "loading..." })
     const [loading, setloading] = useState(true)
+    const [timeStamps, settimeStamps] = useState([])
+
     const title = `*${playing.title}*
 Recording of *${playing.date && playing.date.toDate().toString().substring(0, 15)}* 😄🙏🏼
 I loved hearing this audio. Thought sharing with you
@@ -66,8 +70,19 @@ I loved hearing this audio. Thought sharing with you
                                     .update({ views: firebase.firestore.FieldValue.increment(1) })
                             }
                         })
+                      
                 }
             })
+    }, [])
+    useEffect(() => {
+        notification.open({
+            message: 'Congratulations !!',
+            description:
+              'You have discovered New Feature called \n"Quick Access" \n try it out!!',
+              duration: 5,
+
+            icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+          });       
     }, [])
     const likeIt = () => {
         if (!liked) {
@@ -102,7 +117,7 @@ I loved hearing this audio. Thought sharing with you
             >
 
                 <AudioPlayer
-
+                    ref={playerRef}
                     header={<center><h3>Now Playing:- {playing.title}.</h3>   </center>}
                     customAdditionalControls={[]}
                     src={`https://docs.google.com/uc?export=download&id=${playing.id}`}
@@ -123,6 +138,23 @@ I loved hearing this audio. Thought sharing with you
                     fontSize: "20px",
                 }} />
                 <br />    &nbsp;&nbsp;
+                <h4>
+                    Quick Access:-
+                </h4>
+                <Timeline >
+
+                {playing.ts && playing.ts.map(ts => <Timeline.Item dot={<ClockCircleOutlined />}>
+                        {ts.title}&nbsp;&nbsp;{
+                            ts.time.split(':').map((t,i)=><span style={{color:"blue"}}>{Number(t)>0?`${t}${i==2?"":":"}`:""}</span>) 
+                            }&nbsp;&nbsp;
+                        <Button onClick={() => {
+                            var hms = ts.time;
+                            var a = hms.split(':');
+                            var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+                            playerRef.current.audio.current.currentTime = seconds
+                        }}>Play</Button>
+                    </Timeline.Item>)}
+                    </Timeline>
 
                 <WhatsappShareButton
                     url={window.location.href}
@@ -165,6 +197,7 @@ I loved hearing this audio. Thought sharing with you
 
                     }
                 </ReactMarkdown>
+                
                 <hr />
                 <br />
                 {

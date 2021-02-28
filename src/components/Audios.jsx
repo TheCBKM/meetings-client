@@ -80,7 +80,7 @@ export default function Audios() {
                 result.map(a => <div style={{ marginTop: 20 }}>
                     <Card title={a.title}>
                         <p>
-                            on {a.date.toDate().toString().substring(0, 15)}
+                            on {a.date && a.date.toDate().toString().substring(0, 15)}
                             <br />
                             <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 60)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
 
