@@ -105,7 +105,9 @@ I loved hearing this audio. Thought sharing with you
 
     const downloader = {
         "rjoshi14899@gmail.com": true,
-        "dharwadkarnj@gmail.com": true
+        "dharwadkarnj@gmail.com": true,
+        "+919340573858":true,
+        "+919561721324":true
     }
     return (
         <div style={{ height: "50vh" }}>
@@ -201,9 +203,20 @@ I loved hearing this audio. Thought sharing with you
                 <hr />
                 <br />
                 {
-                    autUser && downloader[autUser.email] == true ?
+                    autUser && (autUser.email &&downloader[autUser.email] == true) ||(autUser.phoneNumber&& downloader[autUser.phoneNumber])==true ?
+                    <div>
+                    <Button href={`https://docs.google.com/uc?export=download&id=${playing.id}`} target="_blank">Download</Button>  <br/>
+                    {`https://drive.google.com/file/d/${playing.id}/view?usp=sharing`}
+                    <br/>
+                    <WhatsappShareButton
+                    url={`https://drive.google.com/file/d/${playing.id}/view?usp=sharing`}
+                    title={"Direct Link "}
+                    separator=" ">
+                    <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+                    </div>
+                 : ""
 
-                        <Button href={`https://docs.google.com/uc?export=download&id=${id}`} target="_blank">Download</Button> : ""
                 }
 
             </p>
