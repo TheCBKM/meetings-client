@@ -74,16 +74,6 @@ I loved hearing this audio. Thought sharing with you
                 }
             })
     }, [])
-    useEffect(() => {
-        notification.open({
-            message: 'Congratulations !!',
-            description:
-              'You have discovered New Feature called \n"Quick Access" \n try it out!!',
-              duration: 5,
-
-            icon: <SmileOutlined style={{ color: '#108ee9' }} />,
-          });       
-    }, [])
     const likeIt = () => {
         if (!liked) {
             message.success("Thank you for a LIKE")
