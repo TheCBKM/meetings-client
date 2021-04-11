@@ -3,7 +3,7 @@ import { Form, Input, Button, Result, message, Divider } from "antd";
 import db from "../firebase";
 import { userStore } from "./Store";
 import { navigate, Router } from "@reach/router";
-import { Select,Grid, Card, CardActionArea, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, InputBase, TextField, MenuItem } from "@material-ui/core";
+import { Select, Grid, Card, CardActionArea, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, InputBase, TextField, MenuItem } from "@material-ui/core";
 
 const upasnas = [
   "Happy Club, Kandivali",
@@ -210,7 +210,8 @@ export default function RegisterMeeting(props) {
       )
       .then(() => message.success("Thank you for registering with us.."))
       .catch(console.log);
-      window.location.reload()  };
+    window.location.reload()
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -272,24 +273,27 @@ export default function RegisterMeeting(props) {
           <AccordionDetails>
             <div style={{ margin: 20 }}>
               <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
-                <TextField id="standard-basic" label="Zoom Name" name="attendee"
-                  required={true}
-                  type="text"
-                  value={zoomname}
-                  onChange={onZoomnameChange} />
-
-                <TextField
-                  label="Total Attendee"
-                  name="attendee"
-                  type="number"
-                  required={true}
-                  max={10}
-                  min={1}
-                  value={atendee}
-                  onChange={onAttendeeChange}
-                />
                 <p>
-                  Total Questions
+
+                  <TextField id="standard-basic" label="Zoom Name" name="attendee"
+                    required={true}
+                    type="text"
+                    value={zoomname}
+                    onChange={onZoomnameChange} />
+                </p>
+                <p>
+                  <TextField
+                    label="Total Attendee"
+                    name="attendee"
+                    type="number"
+                    required={true}
+                    max={10}
+                    min={1}
+                    value={atendee}
+                    onChange={onAttendeeChange}
+                  />
+                </p>
+                <p>
                   <TextField
                     label="Total Questions"
                     type="number"
@@ -311,8 +315,6 @@ export default function RegisterMeeting(props) {
                   />
                 </p>
                 <p>
-                  Upasna Kendra
-                    <br />
                   <Select
                     value={uk}
                     required={true}
@@ -337,7 +339,6 @@ export default function RegisterMeeting(props) {
                 </p>
 
                 <p>
-                  <br />
                   <TextField
                     label="Cityr"
                     type="text"
@@ -383,41 +384,41 @@ export default function RegisterMeeting(props) {
             </Card>
           </center>
 
-        
-            <Typography align="center" gutterBottom variant="h6" component="h2">
-              Log Book
+
+          <Typography align="center" gutterBottom variant="h6" component="h2">
+            Log Book
                   </Typography>
 
 
-              {logs.map((l, i) => (
-               
+          {logs.map((l, i) => (
+
             <Grid container spacing={4} justify="space-between" >
 
-                  <Grid item lg={6}>
-                    <Typography gutterBottom variant="h6" component="h2">
-                      {l.zoomname}
-                    </Typography>      
-                    <Typography variant="body2" color="textSecondary" component="p">
+              <Grid item lg={6}>
+                <Typography gutterBottom variant="h6" component="h2">
+                  {l.zoomname}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
 
-                        will attend
+                  will attend
                 {l.atendee > 1 && ` with ${l.atendee - 1} other(s) `}
-                        {l.question > 0 && " and ask question(s)"}
-                    </Typography> 
-                                          </Grid>
-                  
-                  <Grid item lg={6}>
-                  <img
-                      loading="lazy"
-                      style={{ height: 50 }}
-                      src={l.autUser.photoURL != "" ? `${l.autUser.photoURL}` : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`}
-                    />  
-                                               </Grid>
-                                               <Divider  />
+                  {l.question > 0 && " and ask question(s)"}
+                </Typography>
+              </Grid>
 
-                </Grid> 
-                
-              ))}
-               </div>
+              <Grid item lg={6}>
+                <img
+                  loading="lazy"
+                  style={{ height: 50 }}
+                  src={l.autUser.photoURL != "" ? `${l.autUser.photoURL}` : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`}
+                />
+              </Grid>
+              <Divider />
+
+            </Grid>
+
+          ))}
+        </div>
 
       )}
     </div>
