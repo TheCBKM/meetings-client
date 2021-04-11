@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Select, Card, Collapse, Result, message } from "antd";
+import { Form, Input, Button, Result, message, Divider } from "antd";
 import db from "../firebase";
 import { userStore } from "./Store";
-import { navigate } from "@reach/router";
-
-const { Panel } = Collapse;
-const { Option } = Select;
+import { navigate, Router } from "@reach/router";
+import { Select,Grid, Card, CardActionArea, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, InputBase, TextField, MenuItem } from "@material-ui/core";
 
 const upasnas = [
   "Happy Club, Kandivali",
@@ -54,7 +52,7 @@ export default function RegisterMeeting(props) {
   const onAttendeeChange = (e) => setAttendee(event.target.value);
   const onQuestionChange = (e) => setQuestion(event.target.value);
   const onWhatsappChange = (e) => setWhatsapp(event.target.value);
-  const onUkChange = (e) => setUk(e);
+  const onUkChange = (e) => setUk(e.target.value);
   const onCityChange = (e) => setCity(event.target.value);
 
   useEffect(() => {
@@ -212,31 +210,42 @@ export default function RegisterMeeting(props) {
       )
       .then(() => message.success("Thank you for registering with us.."))
       .catch(console.log);
-  };
+      window.location.reload()  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
   return (
     <div>
       <div className="details">
-        <Card title={title}>
-          <p>{desc}</p>
-          {isBooked ? (
-            <>
-              {available ? (
-                <div>
+        <Card >
+          <CardActionArea>
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="h2">
+                {`${title ?? "no title"}`}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                {`${desc ?? ""}`}
 
-                  <p>ID:{zid}</p>
-                  <p>Password:{pass}</p>
-                  <p>Link:<a href={link}>{link}</a></p>
-                </div>
-              ) : (
-                  <p>Meeting details will be available soon</p>
+                {isBooked ? (
+                  <>
+                    {available ? (
+                      <div>
+
+                        <p>ID:{zid}</p>
+                        <p>Password:{pass}</p>
+                        <p>Link:<a href={link}>{link}</a></p>
+                      </div>
+                    ) : (
+                      <p>Meeting details will be available soon</p>
+                    )}
+                  </>
+                ) : (
+                  <p>You have to book first to see more details </p>
                 )}
-            </>
-          ) : (
-              <p>You have to book first to see more details </p>
-            )}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+
         </Card>
       </div>
       {isBooked ? (
@@ -246,165 +255,170 @@ export default function RegisterMeeting(props) {
           subTitle="You have Successfully Registered yourself. Please visit here (again) one hour prior the meeting starts for meeting details  "
         />
       ) : (
-          ""
-        )}
+        ""
+      )}
       <div style={{ margin: 10 }}>
-        <Collapse>
-          <Panel
-            header={
+        <Accordion>
+          <AccordionSummary
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>{
               isBooked
                 ? "Click here to update your details"
                 : "Click Here to register. "
-            }
-            key="1"
-          >
-            <p>
-              <div style={{ margin: 20 }}>
-                <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
-                  <p>
-                    Zoom Name
-                    <Input
-                      name="attendee"
-                      required={true}
-                      type="text"
-                      value={zoomname}
-                      onChange={onZoomnameChange}
-                    />
-                  </p>
+            }</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div style={{ margin: 20 }}>
+              <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
+                <TextField id="standard-basic" label="Zoom Name" name="attendee"
+                  required={true}
+                  type="text"
+                  value={zoomname}
+                  onChange={onZoomnameChange} />
 
-                  <p>
-                    Total Attendee
-                    <Input
-                      name="attendee"
-                      type="number"
-                      required={true}
-                      max={10}
-                      min={1}
-                      value={atendee}
-                      onChange={onAttendeeChange}
-                    />
-                  </p>
-                  <p>
-                    Total Questions
-                    <Input
-                      type="number"
-                      required={true}
-                      max={10}
-                      min={0}
-                      value={question}
-                      onChange={onQuestionChange}
-                    />
-                  </p>
-                  <p>
-                    WhatsApp mobile number
-                    <Input
-                      type="number"
-                      required={true}
-                      max={9999999999}
-                      min={1111111111}
-                      value={whatsapp}
-                      onChange={onWhatsappChange}
-                    />
-                  </p>
-                  <p>
-                    Upasna Kendra
+                <TextField
+                  label="Total Attendee"
+                  name="attendee"
+                  type="number"
+                  required={true}
+                  max={10}
+                  min={1}
+                  value={atendee}
+                  onChange={onAttendeeChange}
+                />
+                <p>
+                  Total Questions
+                  <TextField
+                    label="Total Questions"
+                    type="number"
+                    required={true}
+                    max={10}
+                    min={0}
+                    value={question}
+                    onChange={onQuestionChange}
+                  />
+                </p>
+                <p>
+                  <TextField
+                    label="WhatsApp mobile number"
+                    required={true}
+                    max={9999999999}
+                    min={1111111111}
+                    value={whatsapp}
+                    onChange={onWhatsappChange}
+                  />
+                </p>
+                <p>
+                  Upasna Kendra
                     <br />
-                    <Select
-                      value={uk}
-                      required={true}
-                      showSearch
-                      style={{ width: 200 }}
-                      placeholder="Select a Upasna Kendra"
-                      optionFilterProp="children"
-                      onChange={onUkChange}
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                    >
-                      {upasnas.map((u) => (
-                        <Option value={`${u}`}>{u}</Option>
-                      ))}
-                    </Select>
-                  </p>
+                  <Select
+                    value={uk}
+                    required={true}
+                    showSearch
+                    style={{ width: 200 }}
+                    placeholder="Select a Upasna Kendra"
+                    optionFilterProp="children"
+                    onChange={onUkChange}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {upasnas.map((u) => (
+                      <MenuItem value={`${u}`}>{u}</MenuItem>
+                    ))}
+                  </Select>
+                </p>
 
-                  <p>
-                    City
-                    <br />
-                    <Input
-                      placeholder="Type Your City"
-                      type="text"
-                      required={true}
-                      value={city}
-                      onChange={onCityChange}
-                    />
-                    {/* <Select
-                      value={city}
-                      required={true}
-                      showSearch
-                      style={{ width: 200 }}
-                      placeholder="Select a City"
-                      optionFilterProp="children"
-                      onChange={onCityChange}
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                    >
-                      {cities.map((u) => (
-                        <Option value={`${u}`}>{u}</Option>
-                      ))}
-                    </Select> */}
-                  </p>
-                  <p>
-                    {lock ? (
-                      "You can't register now meeting is LOCKED "
-                    ) : (
-                        <Button disabled={lock} htmlType="submit" type="primary">
-                          {isBooked ? "Update" : "Submit"}
-                        </Button>
-                      )}
-                  </p>
-                </Form>
-              </div>
-            </p>
-          </Panel>
-        </Collapse>
+                <p>
+                  <br />
+                  <TextField
+                    label="Cityr"
+                    type="text"
+                    required={true}
+                    value={city}
+                    onChange={onCityChange}
+                  />
+
+                </p>
+                <p>
+                  {lock ? (
+                    "You can't register now meeting is LOCKED "
+                  ) : (
+                    <Button disabled={lock} htmlType="submit" type="primary">
+                      {isBooked ? "Update" : "Submit"}
+                    </Button>
+                  )}
+                </p>
+              </Form>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+
       </div>
       {isBooked && (
         <div style={{ marginTop: 20 }}>
           <center>
-            <Card style={{ marginBottom: 10 }} title="Analytics">
-              <p>Total Registered :{logsRegisterCount}</p>
-              <p>Total Attendee :{logsAttendeeCount}</p>
-              <p>Total Questions :{logsQuestionsCount}</p>
+            <Card style={{ marginBottom: 10 }} >
+              <CardActionArea>
+
+                <CardContent>
+                  <Typography gutterBottom variant="h6" component="h2">
+                    Analytics
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    <p>Total Registered :{logsRegisterCount}</p>
+                    <p>Total Attendee :{logsAttendeeCount}</p>
+                    <p>Total Questions :{logsQuestionsCount}</p>
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+
             </Card>
           </center>
-          <Card title="Log Book">
-            {logs.map((l, i) => (
-              <Card
-                key={i}
-                style={{ marginBottom: 5 }}
-                title={l.zoomname}
-                extra={
+
+        
+            <Typography align="center" gutterBottom variant="h6" component="h2">
+              Log Book
+                  </Typography>
+
+
+              {logs.map((l, i) => (
+               
+            <Grid container spacing={4} justify="space-between" >
+
+                  <Grid item lg={6}>
+                    <Typography gutterBottom variant="h6" component="h2">
+                      {l.zoomname}
+                    </Typography>      
+                    <Typography variant="body2" color="textSecondary" component="p">
+
+                        will attend
+                {l.atendee > 1 && ` with ${l.atendee - 1} other(s) `}
+                        {l.question > 0 && " and ask question(s)"}
+                    </Typography> 
+                                          </Grid>
+                  
+                  <Grid item lg={6}>
                   <img
-                    loading="lazy"
-                    style={{ height: 50 }}
-                    src={l.autUser.photoURL != "" ? `${l.autUser.photoURL}` : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`}
-                  />
-                }
-              >
-                <p>
-                  will attend
-                  {l.atendee > 1 && ` with ${l.atendee - 1} other(s) `}
-                  {l.question > 0 && " and ask question(s)"}
-                </p>
-              </Card>
-            ))}
-          </Card>
-        </div>
+                      loading="lazy"
+                      style={{ height: 50 }}
+                      src={l.autUser.photoURL != "" ? `${l.autUser.photoURL}` : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`}
+                    />  
+                                               </Grid>
+                                               <Divider  />
+
+                </Grid> 
+                
+              ))}
+               </div>
+
       )}
     </div>
   );
