@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SignUp from "./SignUp.jsx";
 import { Router, navigate } from "@reach/router";
 
@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function App(props) {
+  useEffect(() => {
+    if (location.pathname.startsWith("/audio"))
+    setValue(1);
+  }, [])
   const user = userStore.useState((s) => s.user);
   console.log("user", user);
   const signOut = () => {
@@ -36,7 +40,6 @@ export default function App(props) {
 
   const classes = useStyles();
 
-
   return (
     <div>
       {user == false ? (
@@ -47,16 +50,17 @@ export default function App(props) {
         <div>
           <AppBar position="static">
             <Toolbar >
-              <Typography className={classes.title}>Meetings : CBKM</Typography>
+              <Typography  variant="h6" className={classes.title}>Meetings   {user ? user.phoneNumber.length > 0 ? user.phoneNumber : user.displayName : ""}
+</Typography>
               {user && (
-                <Button onClick={signOut}>Logout</Button>
+                <Button  color="secondary" onClick={signOut}>Logout</Button>
               )}
             </Toolbar>
 
             {user && (
               <Tabs value={value} onChange={handleChange} centered aria-label="simple tabs example">
-                <Tab label="Meetings" />
-                <Tab label="Recordings" />
+                <Tab   label="Meetings" />
+                <Tab   label="Recordings" />
               </Tabs>
             )}
           </AppBar>

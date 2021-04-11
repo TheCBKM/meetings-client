@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import db from "../firebase";
 import MeetingCard from "./MeetingCard";
@@ -21,11 +22,16 @@ export default function AllMeetings() {
   }, []);
   console.log(meetings);
   return (
-    <div>
-      {meetings.length > 0 ? meetings.map((m) => (
-        <MeetingCard meeting={m} />
-      )) : "No new meeting right now try in some time.."}
-      {/* {meetings.length==0 && <p>No New Meetings</p>} */}
+    <div style={{ topMargin: 3 }}>
+      <Grid container justify="center" spacing={10}>
+
+        {meetings.length > 0 ? meetings.map((m) => (
+          <Grid key={m.id} item>
+
+            <MeetingCard meeting={m} />
+          </Grid>
+        )) : "No new meeting right now try in some time.."}
+      </Grid>
     </div>
   );
 }

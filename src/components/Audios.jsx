@@ -1,11 +1,37 @@
 import { Link } from '@reach/router'
-import { BackTop, Button, Card } from 'antd'
+import { BackTop } from 'antd'
 import Search from 'antd/lib/input/Search';
 import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown';
 import db from '../firebase';
 
+import { Card, CardActions, Button, CardActionArea, Typography, makeStyles, CardContent, Grid,  } from "@material-ui/core";
+const useStyles = makeStyles({
+    root: {
+        maxWidth: 345,
+    },
+    media: {
+        height: 140,
+    },
+});
+
+
+const GriduseStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        height: 140,
+        width: 100,
+    },
+    control: {
+        padding: theme.spacing(2),
+    },
+}));
 export default function Audios() {
+    const classes = useStyles();
+    const gridclasses = GriduseStyles();
+
     const [audio, setaudio] = useState([]);
     const [result, setresult] = useState([])
     const [query, setquery] = useState('')
@@ -77,20 +103,39 @@ export default function Audios() {
             <Search placeholder="search any thing ( just type महाराज...)  " enterButton="Search" size="large" onChange={(e) => { deepSearch(e.target.value) }} />
             You can search for title description or even date. Can type in Hindi/Marathi.
             {
-                result.map(a => <div style={{ marginTop: 20 }}>
-                    <Card title={a.title}>
-                        <p>
-                            on {a.date && a.date.toDate().toString().substring(0, 15)}
-                            <br />
-                            <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 60)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
 
-                        </p>
-                        <Link to={`/audio/${a.aid}`}>
-                            <Button>PLAY</Button>
-                        </Link>
-                    </Card>
-                </div>)
-            }
+                <>
+
+                    <div className={gridclasses.root}>
+                        <Grid container justify="center" spacing={10}>
+                            {
+                                result.map(a =>
+                                    <Grid key={a.id} item>
+
+                                        <Card className={classes.root}>
+                                            <CardActionArea>
+                                                <CardContent></CardContent>
+                                                <Typography gutterBottom variant="h7" component="h2">
+                                                    {a.date && a.date.toDate().toString().substring(0, 15)}
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary" component="p">
+                                                    <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 60)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
+
+                                                </Typography>
+                                                <CardActions>
+                                                    <Link to={`/audio/${a.aid}`}>
+                                                        <Button size="small" color="secondary">PLAY</Button>
+                                                    </Link>
+                                                </CardActions>
+                                            </CardActionArea>
+                                        </Card>
+                                    </Grid>
+
+                                )}
+                        </Grid>
+                    </div>
+
+                </>}
         </div>
     )
 }
