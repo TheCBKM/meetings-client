@@ -208,9 +208,10 @@ export default function RegisterMeeting(props) {
           city,
         })
       )
-      .then(() => message.success("Thank you for registering with us.."))
+      .then(() => { message.success("Thank you for registering with us..") 
+        window.location.reload()
+})
       .catch(console.log);
-    window.location.reload()
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
