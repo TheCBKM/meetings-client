@@ -3,7 +3,7 @@ import { Form, Input, Button, Result, message, Divider } from "antd";
 import db from "../firebase";
 import { userStore } from "./Store";
 import { navigate, Router } from "@reach/router";
-import { Select, Grid, Card, CardActionArea, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, InputBase, TextField, MenuItem } from "@material-ui/core";
+import { Select, Grid, Card, CardActionArea, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, InputBase, TextField, MenuItem, Avatar } from "@material-ui/core";
 
 const upasnas = [
   "Happy Club, Kandivali",
@@ -408,7 +408,7 @@ export default function RegisterMeeting(props) {
               </Grid>
 
               <Grid item lg={6}>
-                <img
+                <Avatar
                   loading="lazy"
                   style={{ height: 50 }}
                   src={l.autUser.photoURL != "" ? `${l.autUser.photoURL}` : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`}
