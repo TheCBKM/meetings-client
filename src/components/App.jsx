@@ -126,8 +126,8 @@ export default function App(props) {
             style={{
               margin: 0,
               top: 'auto',
-              right: 20,
-              bottom: 20,
+              right: 50,
+              bottom: 100,
               left: 'auto',
               position: 'fixed',
             }} color="secondary" aria-label="add">
