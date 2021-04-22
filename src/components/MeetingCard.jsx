@@ -23,7 +23,6 @@ export default function MeetingCard(props) {
           </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
             {desc}
-
           </Typography>
           </CardContent>
         </CardActionArea>

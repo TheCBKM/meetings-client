@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown';
 import db from '../firebase';
 
-import { Card, CardActions, Button, CardActionArea, Typography, makeStyles, CardContent, Grid,  } from "@material-ui/core";
+import { Card, CardActions, Button, CardActionArea, Typography, makeStyles, CardContent, Grid, } from "@material-ui/core";
 const useStyles = makeStyles({
     root: {
         maxWidth: 345,
@@ -114,19 +114,21 @@ export default function Audios() {
 
                                         <Card className={classes.root}>
                                             <CardActionArea>
-                                                <CardContent></CardContent>
-                                                <Typography gutterBottom variant="h7" component="h2">
-                                                    {a.date && a.date.toDate().toString().substring(0, 15)}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary" component="p">
-                                                    <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 60)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h7" component="h2">
+                                                        {a.date && a.date.toDate().toString().substring(0, 15)}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                        <ReactMarkdown>{`${a.description.replaceAll('\\n', '\n').substr(0, 60)}....[read more](/audio/${a.aid})`}</ReactMarkdown>
 
-                                                </Typography>
-                                                <CardActions>
-                                                    <Link to={`/audio/${a.aid}`}>
-                                                        <Button size="small" color="secondary">PLAY</Button>
-                                                    </Link>
-                                                </CardActions>
+                                                    </Typography>
+                                                    <CardActions>
+                                                        <Link to={`/audio/${a.aid}`}>
+                                                            <Button size="small" color="secondary">PLAY</Button>
+                                                        </Link>
+
+                                                    </CardActions>
+                                                </CardContent>
                                             </CardActionArea>
                                         </Card>
                                     </Grid>

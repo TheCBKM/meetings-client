@@ -30,7 +30,7 @@ export default function AllMeetings() {
 
             <MeetingCard meeting={m} />
           </Grid>
-        )) : "No new meeting right now try in some time.."}
+        )) : <Grid > <br/><br/>No new meeting right now try in some time..</Grid>}
       </Grid>
     </div>
   );

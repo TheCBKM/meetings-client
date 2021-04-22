@@ -6,10 +6,10 @@ import firebase from "firebase";
 import { userStore } from './Store';
 import HeartOutlined, { ClockCircleOutlined, EyeTwoTone, HeartFilled, HeartTwoTone, SmileOutlined } from '@ant-design/icons'
 import LoadingOverlay from 'react-loading-overlay'
-import { Button, message,notification,Timeline } from 'antd';
+import { Button, message,Timeline } from 'antd';
 import { navigate } from '@reach/router'
 
-import { EmailIcon, EmailShareButton, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, TelegramIcon, TelegramShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
+import { EmailIcon, EmailShareButton, TelegramIcon, TelegramShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
 import ReactMarkdown from 'react-markdown'
 
 
