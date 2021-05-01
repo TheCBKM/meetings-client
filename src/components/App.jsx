@@ -149,7 +149,7 @@ export default function App(props) {
               }}>
                 <CardContent >
                   <Typography align="center" className={classes.title} color="textSecondary" gutterBottom>
-                    Thought of the Day
+                    #Thoughts
         </Typography>
                   <Typography align="center" variant="h5" component="h1">
                     {thought.split('\n').map(str => <>{str}<br /></>)}

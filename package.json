@@ -9,6 +9,7 @@
         "copy:css": "cpy 'index.css' 'dist'",
         "build:main": "parcel build src/index.js --no-minify --no-content-hash --no-cache --no-source-maps --out-dir dist",
         "prod": "npm-run-all build:* copy:*"
+        
     },
     "author": "",
     "license": "ISC",

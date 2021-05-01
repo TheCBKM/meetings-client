@@ -341,7 +341,7 @@ export default function RegisterMeeting(props) {
 
                 <p>
                   <TextField
-                    label="Cityr"
+                    label="City"
                     type="text"
                     required={true}
                     value={city}
