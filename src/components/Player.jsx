@@ -129,7 +129,7 @@ I loved hearing this audio. Thought sharing with you
           }
           customAdditionalControls={[]}
           src={
-            playing?.id?.includes("pinata")
+            playing?.id?.includes("http")
               ? playing.id
               : `https://docs.google.com/uc?export=download&id=${playing.id}`
           }
@@ -219,7 +219,7 @@ I loved hearing this audio. Thought sharing with you
           <div>
             <Button
               href={
-                playing?.id?.includes("pinata")
+                playing?.id?.includes("http")
                   ? playing.id
                   : `https://docs.google.com/uc?export=download&id=${playing.id}`
               }
@@ -228,13 +228,13 @@ I loved hearing this audio. Thought sharing with you
               Download
             </Button>{" "}
             <br />
-            {playing?.id?.includes("pinata")
+            {playing?.id?.includes("http")
               ? playing.id
               : `https://drive.google.com/file/d/${playing.id}/view?usp=sharing`}
             <br />
             <WhatsappShareButton
               url={
-                playing?.id?.includes("pinata")
+                playing?.id?.includes("http")
                   ? playing?.id
                   : `https://drive.google.com/file/d/${playing.id}/view?usp=sharing`
               }
