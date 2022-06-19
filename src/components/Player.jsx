@@ -130,7 +130,7 @@ I loved hearing this audio. Thought sharing with you
           customAdditionalControls={[]}
           src={
             playing?.id?.includes("meeting")
-              ? playing.id
+              ? playing?.id
               : `https://docs.google.com/uc?export=download&id=${playing.id}`
           }
           onCanPlay={(e) => {
