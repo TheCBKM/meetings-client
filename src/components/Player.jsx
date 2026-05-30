@@ -4,15 +4,13 @@ import "react-h5-audio-player/lib/styles.less";
 import db from "../firebase";
 import firebase from "firebase";
 import { userStore } from "./Store";
-import HeartOutlined, {
+import {
   ClockCircleOutlined,
   EyeTwoTone,
-  HeartFilled,
   HeartTwoTone,
-  SmileOutlined,
 } from "@ant-design/icons";
 import LoadingOverlay from "react-loading-overlay";
-import { Button, message, Timeline } from "antd";
+import { Button, message, Timeline, Typography } from "antd";
 import { navigate } from "@reach/router";
 
 import {
@@ -32,7 +30,6 @@ export default function Player({ id }) {
   const [liked, setliked] = useState(false);
   const [playing, setplaying] = useState({ title: "loading..." });
   const [loading, setloading] = useState(true);
-  const [timeStamps, settimeStamps] = useState([]);
 
   const title = `*${playing.title}*
 Recording of *${
@@ -47,14 +44,10 @@ I loved hearing this audio. Thought sharing with you
       .doc(id)
       .onSnapshot(async (snap) => {
         if (!snap.exists) {
-          // await db.collection("audio")
-          //     .doc(id)
-          //     .delete()
           navigate("/");
         } else {
           let data = snap.data();
           setplaying(data);
-          console.log(autUser.uid, autUser.displayName);
 
           db.collection("audio")
             .doc(id)
@@ -73,7 +66,6 @@ I loved hearing this audio. Thought sharing with you
             .doc(autUser.uid)
             .get()
             .then((doc) => {
-              console.log(doc.exists, doc.ref);
               if (!doc.exists) {
                 doc.ref.set({
                   id: autUser.uid,
@@ -118,59 +110,72 @@ I loved hearing this audio. Thought sharing with you
     "+919561721324": true,
   };
   return (
-    <div style={{ height: "50vh" }}>
-      <LoadingOverlay active={loading} spinner text={"Loading your audio...."}>
-        <AudioPlayer
-          ref={playerRef}
-          header={
-            <center>
-              <h3>Now Playing:- {playing.title}.</h3>{" "}
-            </center>
-          }
-          customAdditionalControls={[]}
-          src={
-            playing?.id?.includes("meeting")
-              ? playing?.id
-              : `https://docs.google.com/uc?export=download&id=${playing.id}`
-          }
-          onCanPlay={(e) => {
-            console.log("onCanPlay");
-            setloading(false);
-          }}
-        />
-      </LoadingOverlay>
+    <div className="player-page">
+      <div className="player-section player-section--hero" style={{ minHeight: 120 }}>
+        <LoadingOverlay active={loading} spinner text={"Loading your audio...."}>
+          <AudioPlayer
+            ref={playerRef}
+            header={
+              <Typography.Title level={4} style={{ textAlign: "center", margin: 0 }} className="display-font">
+                Now Playing: {playing.title}
+              </Typography.Title>
+            }
+            customAdditionalControls={[]}
+            style={{ width: "100%" }}
+            src={
+              playing?.id?.includes("meeting")
+                ? playing?.id
+                : `https://docs.google.com/uc?export=download&id=${playing.id}`
+            }
+            onCanPlay={(e) => {
+              setloading(false);
+            }}
+          />
+        </LoadingOverlay>
+      </div>
 
-      <br />
-      <center>
-        <h2>{playing.title}</h2>
-      </center>
+      <div className="player-section">
+        <Typography.Title level={3} style={{ textAlign: "center", marginTop: 0 }} className="display-font">
+          {playing.title}
+        </Typography.Title>
 
-      <p>
-        {playing.views && playing.views} watched <EyeTwoTone />
-        &nbsp; | &nbsp;
-        {playing.liked || 0} liked &nbsp;
-        <HeartTwoTone
-          id="like-button"
-          onClick={likeIt}
-          twoToneColor={liked ? "#eb2f96" : ""}
-          style={{
-            fontSize: "20px",
-          }}
-        />
-        <br /> &nbsp;&nbsp;
-        <h4>Quick Access:-</h4>
-        <Timeline>
-          {playing.ts &&
-            playing.ts.map((ts) => (
-              <Timeline.Item dot={<ClockCircleOutlined />}>
+        <div className="player-stats">
+          <span>
+            {playing.views && playing.views} watched <EyeTwoTone />
+          </span>
+          <span>
+            {playing.liked || 0} liked{" "}
+            <HeartTwoTone
+              id="like-button"
+              onClick={likeIt}
+              twoToneColor={liked ? "#ff0555" : ""}
+              style={{ fontSize: 20, cursor: "pointer" }}
+            />
+          </span>
+          {playing.date && (
+            <span>{playing.date.toDate().toString().substring(0, 15)}</span>
+          )}
+        </div>
+      </div>
+
+      {playing.ts && playing.ts.length > 0 && (
+        <div className="player-section">
+          <Typography.Title level={4} className="display-font">
+            Quick Access
+          </Typography.Title>
+          <Timeline>
+            {playing.ts.map((ts, idx) => (
+              <Timeline.Item key={idx} dot={<ClockCircleOutlined />}>
                 {ts.title}&nbsp;&nbsp;
                 {ts.time.split(":").map((t, i) => (
-                  <span style={{ color: "blue" }}>
+                  <span key={i} className="timestamp-chip">
                     {Number(t) > 0 ? `${t}${i == 2 ? "" : ":"}` : ""}
                   </span>
                 ))}
                 &nbsp;&nbsp;
                 <Button
+                  size="small"
+                  className="btn-seek"
                   onClick={() => {
                     var hms = ts.time;
                     var a = hms.split(":");
@@ -182,56 +187,66 @@ I loved hearing this audio. Thought sharing with you
                 </Button>
               </Timeline.Item>
             ))}
-        </Timeline>
-        <WhatsappShareButton
-          url={window.location.href}
-          title={title}
-          separator=" "
-        >
-          <WhatsappIcon size={32} round />
-        </WhatsappShareButton>
-        &nbsp;&nbsp;&nbsp;
-        <TelegramShareButton url={window.location.href} title={title}>
-          <TelegramIcon size={32} round />
-        </TelegramShareButton>
-        &nbsp;
-        <EmailShareButton
-          url={window.location.href}
-          subject={"FROM CBKM"}
-          body={title}
-        >
-          <EmailIcon size={32} round />
-        </EmailShareButton>
-        &nbsp;
-        <br />
-        {playing.date && playing.date.toDate().toString().substring(0, 15)}
-        <br />
-        <br />
-        <hr />
-        <h4>Description:-</h4>
+          </Timeline>
+        </div>
+      )}
+
+      <div className="player-section">
+        <Typography.Title level={4} style={{ textAlign: "center" }} className="display-font">
+          Share
+        </Typography.Title>
+        <div className="player-share-row">
+          <WhatsappShareButton url={window.location.href} title={title} separator=" ">
+            <span className="share-chip">
+              <WhatsappIcon size={36} round />
+              WhatsApp
+            </span>
+          </WhatsappShareButton>
+          <TelegramShareButton url={window.location.href} title={title}>
+            <span className="share-chip">
+              <TelegramIcon size={36} round />
+              Telegram
+            </span>
+          </TelegramShareButton>
+          <EmailShareButton url={window.location.href} subject={"FROM CBKM"} body={title}>
+            <span className="share-chip">
+              <EmailIcon size={36} round />
+              Email
+            </span>
+          </EmailShareButton>
+        </div>
+      </div>
+
+      <div className="player-section player-description">
+        <Typography.Title level={4} className="display-font">
+          Description
+        </Typography.Title>
         <ReactMarkdown>
           {playing.description && playing.description.replaceAll("\\n", "\n")}
         </ReactMarkdown>
-        <hr />
-        <br />
-        {(autUser && autUser.email && downloader[autUser.email] == true) ||
-        (autUser.phoneNumber && downloader[autUser.phoneNumber]) == true ? (
-          <div>
-            <Button
-              href={
-                playing?.id?.includes("meeting")
-                  ? playing.id
-                  : `https://docs.google.com/uc?export=download&id=${playing.id}`
-              }
-              target="_blank"
-            >
-              Download
-            </Button>{" "}
-            <br />
+      </div>
+
+      {((autUser && autUser.email && downloader[autUser.email] == true) ||
+        (autUser.phoneNumber && downloader[autUser.phoneNumber]) == true) && (
+        <div className="player-section">
+          <Button
+            className="btn-seek"
+            size="large"
+            href={
+              playing?.id?.includes("meeting")
+                ? playing.id
+                : `https://docs.google.com/uc?export=download&id=${playing.id}`
+            }
+            target="_blank"
+          >
+            Download
+          </Button>
+          <Typography.Paragraph copyable style={{ marginTop: 12, wordBreak: "break-all" }}>
             {playing?.id?.includes("meeting")
               ? playing.id
               : `https://drive.google.com/file/d/${playing.id}/view?usp=sharing`}
-            <br />
+          </Typography.Paragraph>
+          <div className="player-share-row">
             <WhatsappShareButton
               url={
                 playing?.id?.includes("meeting")
@@ -241,13 +256,14 @@ I loved hearing this audio. Thought sharing with you
               title={"Direct Link "}
               separator=" "
             >
-              <WhatsappIcon size={32} round />
+              <span className="share-chip">
+                <WhatsappIcon size={36} round />
+                Share link
+              </span>
             </WhatsappShareButton>
           </div>
-        ) : (
-          ""
-        )}
-      </p>
+        </div>
+      )}
     </div>
   );
 }

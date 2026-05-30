@@ -217,25 +217,26 @@ export default function RegisterMeeting(props) {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div>
+    <div className="app-content">
       <div className="details">
-        <Card >
-          <CardActionArea>
+        <Card className="brand-card">
+          <CardActionArea component="div">
             <CardContent>
               <Typography gutterBottom variant="h6" component="h2">
                 {`${title ?? "no title"}`}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
+              <Typography variant="body1" color="textSecondary" component="div">
                 {`${desc ?? ""}`}
 
                 {isBooked ? (
                   <>
                     {available ? (
-                      <div>
-
+                      <div className="meeting-credentials">
                         <p>ID:{zid}</p>
                         <p>Password:{pass}</p>
-                        <p>Link:<a href={link}>{link}</a></p>
+                        <p>
+                          Link:<a href={link}>{link}</a>
+                        </p>
                       </div>
                     ) : (
                       <p>Meeting details will be available soon</p>
@@ -247,180 +248,193 @@ export default function RegisterMeeting(props) {
               </Typography>
             </CardContent>
           </CardActionArea>
-
         </Card>
       </div>
       {isBooked ? (
-        <Result
-          status="success"
-          title="Congratulation !!"
-          subTitle="You have Successfully Registered yourself. Please visit here (again) one hour prior the meeting starts for meeting details  "
-        />
+        <div>
+          <Result
+            status="success"
+            title="Congratulation !!"
+            subTitle="You have Successfully Registered yourself."
+          />
+          <div className="success-next-steps">
+            Please visit this page again about one hour before the meeting starts to see Zoom ID,
+            password, and join link.
+          </div>
+        </div>
       ) : (
         ""
       )}
-      <div style={{ margin: 10 }}>
+      <div style={{ marginTop: 16 }}>
         <Accordion>
-          <AccordionSummary
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
-            <Typography>{
-              isBooked
+          <AccordionSummary aria-controls="panel2a-content" id="panel2a-header">
+            <Typography>
+              {isBooked
                 ? "Click here to update your details"
-                : "Click Here to register. "
-            }</Typography>
+                : "Click Here to register. "}
+            </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <div style={{ margin: 20 }}>
-              <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
-                <p>
-
-                  <TextField id="standard-basic" label="Zoom Name" name="attendee"
+          <AccordionDetails style={{ display: "block", padding: 16 }}>
+            <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
+              <p className="form-section-label">Your registration details</p>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    id="standard-basic"
+                    label="Zoom Name"
+                    name="attendee"
                     required={true}
                     type="text"
                     value={zoomname}
-                    onChange={onZoomnameChange} />
-                </p>
-                <p>
+                    onChange={onZoomnameChange}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <TextField
+                    fullWidth
                     label="Total Attendee"
                     name="attendee"
                     type="number"
                     required={true}
-                    max={10}
-                    min={1}
+                    inputProps={{ max: 10, min: 1 }}
                     value={atendee}
                     onChange={onAttendeeChange}
+                    variant="outlined"
+                    size="small"
                   />
-                </p>
-                <p>
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <TextField
+                    fullWidth
                     label="Total Questions"
                     type="number"
                     required={true}
-                    max={10}
-                    min={0}
+                    inputProps={{ max: 10, min: 0 }}
                     value={question}
                     onChange={onQuestionChange}
+                    variant="outlined"
+                    size="small"
                   />
-                </p>
-                <p>
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <TextField
+                    fullWidth
                     label="WhatsApp mobile number"
                     required={true}
-                    max={9999999999}
-                    min={1111111111}
+                    inputProps={{ max: 9999999999, min: 1111111111 }}
                     value={whatsapp}
                     onChange={onWhatsappChange}
+                    variant="outlined"
+                    size="small"
                   />
-                </p>
-                <p>
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <Select
+                    fullWidth
                     value={uk}
                     required={true}
-                    showSearch
-                    style={{ width: 200 }}
-                    placeholder="Select a Upasna Kendra"
-                    optionFilterProp="children"
+                    displayEmpty
+                    variant="outlined"
+                    style={{ width: "100%" }}
                     onChange={onUkChange}
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
                   >
-                    <MenuItem value="">
-                      <em>None</em>
+                    <MenuItem value="" disabled>
+                      <em>Select a Upasna Kendra</em>
                     </MenuItem>
                     {upasnas.map((u) => (
-                      <MenuItem value={`${u}`}>{u}</MenuItem>
+                      <MenuItem key={u} value={`${u}`}>
+                        {u}
+                      </MenuItem>
                     ))}
                   </Select>
-                </p>
-
-                <p>
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <TextField
+                    fullWidth
                     label="City"
                     type="text"
                     required={true}
                     value={city}
                     onChange={onCityChange}
+                    variant="outlined"
+                    size="small"
                   />
-
-                </p>
-                <p>
+                </Grid>
+                <Grid item xs={12}>
                   {lock ? (
-                    "You can't register now meeting is LOCKED "
+                    <Typography color="error">
+                      You can't register now meeting is LOCKED{" "}
+                    </Typography>
                   ) : (
-                    <Button disabled={lock} htmlType="submit" type="primary">
+                    <Button disabled={lock} htmlType="submit" type="primary" size="large">
                       {isBooked ? "Update" : "Submit"}
                     </Button>
                   )}
-                </p>
-              </Form>
-            </div>
+                </Grid>
+              </Grid>
+            </Form>
           </AccordionDetails>
         </Accordion>
-
       </div>
       {isBooked && (
-        <div style={{ marginTop: 20 }}>
-          <center>
-            <Card style={{ marginBottom: 10 }} >
-              <CardActionArea>
-
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="h2">
-                    Analytics
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    <p>Total Registered :{logsRegisterCount}</p>
-                    <p>Total Attendee :{logsAttendeeCount}</p>
-                    <p>Total Questions :{logsQuestionsCount}</p>
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-
-            </Card>
-          </center>
-
+        <div style={{ marginTop: 24 }}>
+          <Card style={{ marginBottom: 16 }}>
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="h2">
+                Analytics
+              </Typography>
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <div className="stat-value">{logsRegisterCount}</div>
+                  <div className="stat-label">Registered</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-value">{logsAttendeeCount}</div>
+                  <div className="stat-label">Attendees</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-value">{logsQuestionsCount}</div>
+                  <div className="stat-label">Questions</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <Typography align="center" gutterBottom variant="h6" component="h2">
             Log Book
-                  </Typography>
-
+          </Typography>
 
           {logs.map((l, i) => (
-
-            <Grid container spacing={4} justify="space-between" >
-
-              <Grid item lg={6}>
-                <Typography gutterBottom variant="h6" component="h2">
+            <Grid container spacing={2} alignItems="center" key={i} style={{ marginBottom: 8 }}>
+              <Grid item xs={8} sm={9}>
+                <Typography gutterBottom variant="subtitle1" component="h3">
                   {l.zoomname}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-
                   will attend
-                {l.atendee > 1 && ` with ${l.atendee - 1} other(s) `}
+                  {l.atendee > 1 && ` with ${l.atendee - 1} other(s) `}
                   {l.question > 0 && " and ask question(s)"}
                 </Typography>
               </Grid>
-
-              <Grid item lg={6}>
+              <Grid item xs={4} sm={3} style={{ textAlign: "right" }}>
                 <Avatar
-                  loading="lazy"
-                  style={{ height: 50 }}
-                  src={l.autUser.photoURL != "" ? `${l.autUser.photoURL}` : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`}
+                  style={{ height: 50, width: 50, marginLeft: "auto" }}
+                  src={
+                    l.autUser.photoURL != ""
+                      ? `${l.autUser.photoURL}`
+                      : `http://dummy-data-cbkm.herokuapp.com/getProfile/l?g=${i}`
+                  }
                 />
               </Grid>
-              <Divider />
-
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
             </Grid>
-
           ))}
         </div>
-
       )}
     </div>
   );

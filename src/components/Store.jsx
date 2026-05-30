@@ -5,6 +5,9 @@ export const userStore = new Store({
   user: false,
 });
 
+// Complete any in-flight redirect sign-in (e.g. from a previous session).
+auth.getRedirectResult().catch(() => {});
+
 auth.onAuthStateChanged((user) => {
   userStore.update((s) => {
     if (user) {

@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
 
 export default function Footer() {
-    return (
-        <div>
-            
-        </div>
-    )
+  return (
+    <footer className="app-footer">
+      <span className="display-font">Meetings App</span>
+      <span> · Community meetings & recordings</span>
+      <br />
+      <span>© {new Date().getFullYear()}</span>
+    </footer>
+  );
 }
